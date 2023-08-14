@@ -1,4 +1,5 @@
 const express = require("express");
+var cors = require('cors');
 const fetch = require('node-fetch');
 const ethers = require("ethers");
 const positionRouterABI = require("./positionRouterABI.json");
@@ -190,7 +191,8 @@ PositionListener().catch((error) => {
 });
 
 const app = express();
-const port = 3000;
+app.use(cors());
+const port = 3010;
 
 app.get("/heartbeat", (req, res) => {
   res.send({
