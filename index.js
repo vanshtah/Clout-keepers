@@ -1,4 +1,5 @@
 const express = require("express");
+const fetch = require('node-fetch');
 const ethers = require("ethers");
 const positionRouterABI = require("./positionRouterABI.json");
 const fastPriceABI = require("./fastPriceFeedABI.json");
@@ -205,3 +206,24 @@ app.get("/", async (req, res) => {
 app.listen(port, async () => {
   console.log(`Server is running on port ${port}.`);
 });
+
+app.get("/getdata", async (req, res) => {
+  let symbol = req.query.symbol;
+  let period = req.query.period;
+
+  console.log(req.query)
+
+  let url = `https://api.gateio.ws/api/v4/spot/candlesticks?currency_pair=${symbol}_USDT&interval=${period}`;
+
+    try {
+      const res1 = await fetch(url);
+      const prices = await res1.json();
+
+      return res.send(prices)
+      // return;
+    } catch (ex) {
+      console.log(ex)
+      return res.send("Unable to fetch");
+    }
+
+})
